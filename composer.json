@@ -1,0 +1,21 @@
+{
+    "name": "root/app",
+    "license": "proprietary",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "require-dev": {
+
+    },
+    "require": {
+
+    }
+}
