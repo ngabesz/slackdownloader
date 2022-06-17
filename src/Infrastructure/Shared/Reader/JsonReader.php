@@ -1,31 +1,29 @@
 <?php
 
 
-namespace Infrastructure\Service\Reader;
+namespace Infrastructure\Shared\Reader;
 
 use Domain\MemeImage;
 use Domain\MemeImageCollection;
-use Domain\Reader;
-use Domain\SlackExportFile;
+use Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 
 class JsonReader implements Reader
 {
+    private FilesystemManager $filesystem;
 
-  protected $filesystem;
+    public function __construct( FilesystemManager $filesystem)
+    {
+        $this->filesystem = $filesystem;
+    }
 
-  public function __construct( FilesystemAdapter $filesystem)
-  {
-    $this->filesystem = $filesystem;
-  }
-
-  public function getUrls(SlackExportFile $file) : \Domain\MemeImageCollection
+  public function getUrls(UploadedExportFile $file) : \Domain\MemeImageCollection
   {
 
     $urls = new MemeImageCollection();
     $json = $this->filesystem->getContents($file);
 
-    $posts = json_decode($json, TRUE);
+    $posts = json_decode($json, true);
 
     foreach ($posts as $p){
       if (isset($p['files'])){

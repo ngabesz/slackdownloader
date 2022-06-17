@@ -1,26 +1,24 @@
 <?php
 
 
-namespace Infrastructure\Service\Reader;
+namespace Infrastructure\Shared\Reader;
 
 
 
-use Domain\Reader;
-use Domain\SlackExportFile;
-use \Domain\MemeImageCollection;
-use ZipArchive;
+use Domain\MemeImageCollection;
+use Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 class ZipReader extends JsonReader implements Reader
 {
 
   protected $dir;
 
-  public function __construct(FilesystemAdapter $filesystem)
+  public function __construct(FilesystemManager $filesystem)
   {
     parent::__construct($filesystem);
   }
 
-  public function getUrls(SlackExportFile $file) : \Domain\MemeImageCollection
+  public function getUrls(UploadedExportFile $file) : \Domain\MemeImageCollection
   {
     $dir = $this->filesystem->unZip($file);
 

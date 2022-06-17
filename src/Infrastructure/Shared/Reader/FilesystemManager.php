@@ -1,23 +1,23 @@
 <?php
 
 
-namespace Infrastructure\Service\Reader;
+namespace Infrastructure\Shared\Reader;
 
 
-use Domain\SlackExportFile;
-use Infrastructure\Filesystem\File;
-use Infrastructure\Filesystem\Filesystem;
+use Infrastructure\Shared\Filesystem\File;
+use Infrastructure\Shared\Filesystem\FilesystemInterface;
+use Infrastructure\Shared\FileUploader\UploadedExportFile;
 
-class FilesystemAdapter
+class FilesystemManager
 {
   protected $filesystem;
 
-  public function __construct(Filesystem $filesystem)
+  public function __construct(FilesystemInterface $filesystem)
   {
     $this->filesystem = $filesystem;
   }
 
-  public function getContents(SlackExportFile $file){
+  public function getContents(UploadedExportFile $file){
     $filesystemFile = new File($file->getPath());
     return $this->filesystem->getContents($filesystemFile);
   }
@@ -25,12 +25,12 @@ class FilesystemAdapter
   public function listFiles($dir,$pattern){
     $files = array();
     foreach ($this->filesystem->globRecursive($dir,$pattern) as $f){
-      $files[] = new SlackExportFile($f->getPath());
+      $files[] = new UploadedExportFile($f->getPath());
     }
     return $files;
   }
 
-  public function unZip(SlackExportFile $file)
+  public function unZip(UploadedExportFile $file)
   {
     $filesystemFile = new File($file->getPath());
     return $this->filesystem->unZip($filesystemFile);

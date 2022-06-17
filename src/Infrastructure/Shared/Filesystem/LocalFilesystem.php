@@ -1,10 +1,10 @@
 <?php
 
-namespace Infrastructure\Filesystem;
+namespace Infrastructure\Shared\Filesystem;
 
 use ZipArchive;
 
-class Local implements Filesystem
+class LocalFilesystem implements FilesystemInterface
 {
 
   protected $uploadDir;
@@ -13,12 +13,13 @@ class Local implements Filesystem
   {
     $this->uploadDir = $uploadDir;
   }
-  public function getContents(File $file)
+
+  public function getContents(File $file): string
   {
     return file_get_contents($file->getPath());
   }
 
-  public function uploadFile(File $file,$uploadName)
+  public function uploadFile(File $file,$uploadName): File
   {
     $upload = $this->uploadDir.$uploadName;
 
@@ -27,10 +28,9 @@ class Local implements Filesystem
     }
   }
 
-
   public function unZip(File $file)
   {
-    $dir = $this->uploadDir.time();
+    $dir = $this->uploadDir . time();
 
     $zip = new ZipArchive;
     $res = $zip->open($file->getPath());
@@ -75,5 +75,4 @@ class Local implements Filesystem
     }
     return $files;
   }
-
 }

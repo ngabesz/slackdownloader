@@ -1,12 +1,9 @@
 <?php
 
-
-namespace Infrastructure\Service\Reader;
-
+namespace Infrastructure\Shared\Reader;
 
 use Domain\MemeImageCollection;
-use Domain\Reader;
-use Domain\SlackExportFile;
+use Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 class ExtensionAwareReader implements Reader
 {
@@ -16,7 +13,7 @@ class ExtensionAwareReader implements Reader
     $this->readers[$extension] = $reader;
   }
 
-  public function getUrls(SlackExportFile $file) : MemeImageCollection
+  public function getUrls(UploadedExportFile $file) : MemeImageCollection
   {
 
     $reader = $this->readers[$file->getExtension()];

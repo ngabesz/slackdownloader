@@ -1,30 +1,30 @@
 <?php
 
-
 namespace Domain;
 
 use ArrayAccess;
 use ArrayIterator;
+use Countable;
 use IteratorAggregate;
+use TypeError;
 
-final class MemeImageCollection implements ArrayAccess, IteratorAggregate, \Countable {
+final class MemeImageCollection implements ArrayAccess, IteratorAggregate, Countable {
 
-  private $images;
-
+  private array $images;
 
   public function __construct(MemeImage ...$Images) {
     $this->images = $Images;
   }
 
-  public function offsetExists($offset) : bool {
+  public function offsetExists($offset): bool {
     return isset($this->images[$offset]);
   }
 
-  public function offsetGet($offset) : MemeImage {
+  public function offsetGet($offset): MemeImage {
     return $this->images[$offset];
   }
 
-  public function offsetSet($offset,$value) : void {
+  public function offsetSet($offset,$value): void {
 
     if ($value instanceof MemeImage) {
       if (is_null($offset)) {
@@ -33,10 +33,10 @@ final class MemeImageCollection implements ArrayAccess, IteratorAggregate, \Coun
         $this->images[$offset] = $value;
       }
     }
-    else throw new \TypeError("Not a MemeImage!");
+    else throw new TypeError("Not a MemeImage!");
   }
 
-  public function offsetUnset($offset) : void {
+  public function offsetUnset($offset): void {
     unset($this->images[$offset]);
   }
 
@@ -44,12 +44,12 @@ final class MemeImageCollection implements ArrayAccess, IteratorAggregate, \Coun
     return new ArrayIterator($this->images);
   }
 
-  public function count()
+  public function count(): int
   {
     return count($this->images);
   }
 
-  public function merge(MemeImageCollection $collection )
+  public function merge(MemeImageCollection $collection): void
   {
     foreach ($collection as $c){
       $this->images[] = $c;

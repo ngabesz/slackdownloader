@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Infrastructure\Filesystem;
+namespace Infrastructure\Shared\Filesystem;
 
 
 class File
@@ -12,7 +12,7 @@ class File
 
   public function __construct($path)
   {
-    $name = explode(DIRECTORY_SEPARATOR,$path);
+    $name = explode(DIRECTORY_SEPARATOR, $path);
     $this->name = end($name);
     $this->path = $path;
   }
