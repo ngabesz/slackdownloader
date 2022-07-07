@@ -1,8 +1,8 @@
 <?php
 
-namespace Infrastructure\Shared\FileUploader;
+namespace App\Infrastructure\Shared\FileUploader;
 
-use Domain\Exception\DomainException;
+use App\Domain\Exception\DomainException;
 
 interface FileUploaderInterface
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace Infrastructure\MemeImageParser;
+namespace App\Infrastructure\MemeImageParser;
 
-use Domain\MemeImageCollection;
-use Domain\MemeImageParserInterface;
-use Domain\ValueObject\InputFile;
-use Infrastructure\Shared\FileUploader\ExportFile;
-use Infrastructure\Shared\FileUploader\FileUploaderInterface;
-use Infrastructure\Shared\Reader\Reader;
+use App\Domain\MemeImageCollection;
+use App\Domain\MemeImageParserInterface;
+use App\Domain\ValueObject\InputFile;
+use App\Infrastructure\Shared\FileUploader\ExportFile;
+use App\Infrastructure\Shared\FileUploader\FileUploaderInterface;
+use App\Infrastructure\Shared\Reader\Reader;
 
 class SlackMemeImageParserAdapter implements MemeImageParserInterface
 {

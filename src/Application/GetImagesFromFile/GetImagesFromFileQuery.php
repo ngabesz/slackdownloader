@@ -1,6 +1,6 @@
 <?php
 
-namespace Application\GetImagesFromFile;
+namespace App\Application\GetImagesFromFile;
 
 class GetImagesFromFileQuery
 {

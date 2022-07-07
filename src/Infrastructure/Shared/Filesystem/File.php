@@ -1,8 +1,6 @@
 <?php
 
-
-namespace Infrastructure\Shared\Filesystem;
-
+namespace App\Infrastructure\Shared\Filesystem;
 
 class File
 {

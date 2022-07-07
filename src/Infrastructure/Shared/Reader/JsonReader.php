@@ -1,15 +1,15 @@
 <?php
 
 
-namespace Infrastructure\Shared\Reader;
+namespace App\Infrastructure\Shared\Reader;
 
-use Domain\MemeImageCollection;
-use Infrastructure\Shared\FileUploader\UploadedExportFile;
+use App\Domain\MemeImageCollection;
+use App\Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 
 class JsonReader implements Reader
 {
-    private FilesystemManager $filesystem;
+    protected FilesystemManager $filesystem;
 
     public function __construct( FilesystemManager $filesystem)
     {

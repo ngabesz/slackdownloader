@@ -1,12 +1,11 @@
-<!DOCTYPE html>
-<html>
-<body>
+{% extends 'base.html.twig' %}
 
-<form action="download.php" method="post" enctype="multipart/form-data">
+{% block title %}Hello FileUploadController!{% endblock %}
+
+{% block body %}
+<form action="/file/upload/post" method="post" enctype="multipart/form-data">
     <div>Slack Json vagy Zip export file, max 8 MB:</div>
     <div><input type="file" name="fileToUpload" id="fileToUpload"></div>
     <div><input type="submit" value="Upload" name="submit"></div>
 </form>
-
-</body>
-</html>
+{% endblock %}

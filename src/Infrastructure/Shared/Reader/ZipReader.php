@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Infrastructure\Shared\Reader;
+namespace App\Infrastructure\Shared\Reader;
 
 
 
-use Domain\MemeImageCollection;
-use Infrastructure\Shared\FileUploader\UploadedExportFile;
+use App\Domain\MemeImageCollection;
+use App\Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 class ZipReader extends JsonReader implements Reader
 {
@@ -18,7 +18,7 @@ class ZipReader extends JsonReader implements Reader
     parent::__construct($filesystem);
   }
 
-  public function getUrls(UploadedExportFile $file) : \Domain\MemeImageCollection
+  public function getUrls(UploadedExportFile $file) : MemeImageCollection
   {
     $dir = $this->filesystem->unZip($file);
 

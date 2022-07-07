@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello FileUploadController!{% endblock %}
+
+{% block body %}
+
+    <h1> Az összes képet le tudod tölteni egyben, jobb klikk a fehér részen majd mentés másként:</h1>
+
+    {% for url in urls %}
+        <img src="{{ url.getUrl }}"  alt=""/>
+    {% endfor %}
+{% endblock %}

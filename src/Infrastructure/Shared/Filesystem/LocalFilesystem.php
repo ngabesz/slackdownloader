@@ -1,6 +1,6 @@
 <?php
 
-namespace Infrastructure\Shared\Filesystem;
+namespace App\Infrastructure\Shared\Filesystem;
 
 use ZipArchive;
 

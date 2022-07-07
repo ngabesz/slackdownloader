@@ -1,12 +1,12 @@
 <?php
 
 
-namespace Infrastructure\Shared\Reader;
+namespace App\Infrastructure\Shared\Reader;
 
 
-use Infrastructure\Shared\Filesystem\File;
-use Infrastructure\Shared\Filesystem\FilesystemInterface;
-use Infrastructure\Shared\FileUploader\UploadedExportFile;
+use App\Infrastructure\Shared\Filesystem\File;
+use App\Infrastructure\Shared\Filesystem\FilesystemInterface;
+use App\Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 class FilesystemManager
 {

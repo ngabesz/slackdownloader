@@ -1,9 +1,9 @@
 <?php
 
-namespace Infrastructure\Shared\FileUploader;
+namespace App\Infrastructure\Shared\FileUploader;
 
-use Infrastructure\Shared\Filesystem\File;
-use Infrastructure\Shared\Filesystem\FilesystemInterface;
+use App\Infrastructure\Shared\Filesystem\File;
+use App\Infrastructure\Shared\Filesystem\FilesystemInterface;
 
 class LocalFileUploader implements FileUploaderInterface
 {

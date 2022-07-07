@@ -1,11 +1,11 @@
 <?php
 
-namespace Domain;
+namespace App\Domain;
 
 use ArrayAccess;
 use ArrayIterator;
 use Countable;
-use Domain\Exception\DomainException;
+use App\Domain\Exception\DomainException;
 use IteratorAggregate;
 use TypeError;
 

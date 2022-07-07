@@ -1,9 +1,9 @@
 <?php
 
-namespace Infrastructure\Shared\Reader;
+namespace App\Infrastructure\Shared\Reader;
 
-use Domain\MemeImageCollection;
-use Infrastructure\Shared\FileUploader\UploadedExportFile;
+use App\Domain\MemeImageCollection;
+use App\Infrastructure\Shared\FileUploader\UploadedExportFile;
 
 interface Reader
 {

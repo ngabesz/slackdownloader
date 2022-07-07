@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Domain;
+namespace App\Domain;
 
 
 class MemeImage

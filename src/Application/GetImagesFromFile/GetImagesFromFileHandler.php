@@ -1,10 +1,10 @@
 <?php
 
-namespace Application\GetImagesFromFile;
+namespace App\Application\GetImagesFromFile;
 
-use Domain\ValueObject\InputFile;
-use Domain\MemeImageCollection;
-use Domain\MemeImageParserInterface;
+use App\Domain\ValueObject\InputFile;
+use App\Domain\MemeImageCollection;
+use App\Domain\MemeImageParserInterface;
 
 class GetImagesFromFileHandler
 {

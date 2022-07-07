@@ -1,8 +1,9 @@
 <?php
 
-namespace Infrastructure\Shared\FileUploader;
+namespace App\Infrastructure\Shared\FileUploader;
 
-use Domain\Exception\DomainException;
+use App\Domain\Exception\DomainException;
+
 use function end;
 use function explode;
 

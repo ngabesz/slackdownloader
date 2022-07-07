@@ -1,8 +1,8 @@
 <?php
 
-namespace Domain;
+namespace App\Domain;
 
-use Domain\ValueObject\InputFile;
+use App\Domain\ValueObject\InputFile;
 use DomainException;
 
 interface MemeImageParserInterface
