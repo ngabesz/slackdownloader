@@ -2,7 +2,11 @@
 
 namespace App\Infrastructure\Shared\Filesystem;
 
+use App\Domain\Exception\DomainException;
+use Throwable;
 use ZipArchive;
+
+use function copy;
 
 class LocalFilesystem implements FilesystemInterface
 {
@@ -23,9 +27,11 @@ class LocalFilesystem implements FilesystemInterface
   {
     $upload = $this->uploadDir.$uploadName;
 
-    if ( move_uploaded_file($file->getPath(), $upload)){
-      return new File($upload);
+    if (copy($file->getPath(), $upload)) {
+        throw new DomainException('File upload is failed:' . $file->getName());
     }
+
+      return new File($upload);
   }
 
   public function unZip(File $file)
