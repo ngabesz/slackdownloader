@@ -3,7 +3,6 @@
 namespace App\Infrastructure\Shared\Filesystem;
 
 use App\Domain\Exception\DomainException;
-use Throwable;
 use ZipArchive;
 
 use function copy;
