@@ -26,7 +26,7 @@ class LocalFilesystem implements FilesystemInterface
   {
     $upload = $this->uploadDir.$uploadName;
 
-    if (copy($file->getPath(), $upload)) {
+    if (!copy($file->getPath(), $upload)) {
         throw new DomainException('File upload is failed:' . $file->getName());
     }
 
