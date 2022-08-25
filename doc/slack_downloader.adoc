@@ -5,9 +5,9 @@ A projekt egy tenyésztett problémát mutat be, azzal a céllal, hogy egy egysz
 
 == Probléma
 
-Rengeteg fejtörést okoz a Shoprenteres kollégáknak, hogy képtelenek gyorsan és hatékonyan kinyerni a #random channelben eddig kiposztolt képeket, amelyek túlnyomó része Meme.
+Rengeteg fejtörést okoz a Shoprenteres kollégáknak, hogy képtelenek gyorsan és hatékonyan kinyerni a #random channelben posztolt Memek képeket.
+Ezért meg kellene azt oldani egy alkalmazással a Shoprenter dolgozói ki tudják listázni a meme képeket a Slackből kiexportált json filekből vagy ezek zippelt kollekciójából.
 
-Az igény az lenne, hogy egy webes felületen keresztül, a kollégák feltölthessék egy adott Slack channel-ből kiexportált json fájlt vagy ezen fájlok egy tömörített kollekcióját, és ebből jelenítsünk meg számukra egy kép galériát a böngészőjükben.
 
 == Perszónák
 
@@ -24,6 +24,8 @@ Ugyancsak egy külön modulként szerepel az alkalmazásban, ami authentikálja 
 - *Slack export file*: Az a fájl, melyet egy adott Slack channel-ből ki tudunk exportálni, és fel tudunk tölteni a Parsernek
 - *Fájl feltöltő felület*: Az alkalmazás azon felülete, ahol fel tudom tölteni a *Slack export fájlomat*
 - *Galéria*: Fájl feltöltő felületen feltöltött export fájlban lévő képeket ide listázzuk ki, közvetlenül feltöltés után
+- *Feltöltés log*: Egy logbejegyzés ami tartalmazza a feltöltött file nevét, a feltöltő User nevét és a feltöltés idejét
+- *Belépés log*: Egy logbejegyzés ami tartalmazza a sikeresen belépett User nevét, és a belépés idejét idejét
 
 == Story 1
 
@@ -32,7 +34,7 @@ Shoprenter dolgozóként egy bejelentkező felületen keresztül, be tudok lépn
 === Követelmények:
 - Email cím és jelszó magadása után ellenőrizzük le, látogató valóban jogosult-e az alkalmazásba való belépésre
 - Hiba esetén irányítsunk vissza a bejelentkező felületre és jelenítsük meg: "Hibás email cím vagy jelszó!"
-- Sikeres bejelentkezés követően az alkalmazás főoldalára irányítsunk
+- Sikeres bejelentkezés követően az alkalmazás főoldalára irányítsunk és jelenítsük meg a felhasználó nevét
 - Legyen lelogolva a sikeres bejelentkezés
 
 === Működés
@@ -62,11 +64,13 @@ Scenario: Sign in with wrong email/password
 
 Scenario: Successfully Sign in
     Given I am registrated as User
+    And my name is "Kubu"
     And I am on login page
     When I fill email input with "exists@shoprenter.hu"
     And I fill password input with "123qwe"
     And I submit the login form
     Then I am on main page
+    And I see a message "Hello Kubu"
 
 ----
 
@@ -78,7 +82,7 @@ Bejelentkezett felhasználóként szeretnék feltölteni egy Slack export fájlt
 - Slack export file lehet .json vagy .zip kiterjesztésű, mindkettőt kezelnie kell az alkalmazásnak
 - Ha a fájl nem megfelelő formátumú, a fájl feltöltő oldalon jelenítsünk meg egy üzenetet: "Nem megfelelő formátum!"
 - Ha a fájl nem tartalmaz Slack export file-nak megfelelő tartalmat, a fájl feltöltő oldalon jelenítsünk meg egy üzenetet: "Nem Slack export fájlnak megfelelő tartalom!"
-- Logoljuk le a sikeres belépést az adott Shoprenteres dolgozó alapján
+- Készüljön feltöltés log
 
 === Működés
 
