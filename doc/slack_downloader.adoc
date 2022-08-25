@@ -1,0 +1,199 @@
+= Slack Downloader
+
+== DDD Hexagonal példaprojekt
+A projekt egy tenyésztett problémát mutat be, azzal a céllal, hogy egy egyszerű projekten keresztül megismerkedjünk a DDD alapú termékfejlesztéssel és Hexagonal szoftver architektúrában való programozás mikéntjével.
+
+== Probléma
+
+Rengeteg fejtörést okoz a Shoprenteres kollégáknak, hogy képtelenek gyorsan és hatékonyan kinyerni a #random channelben eddig kiposztolt képeket, amelyek túlnyomó része Meme.
+
+Az igény az lenne, hogy egy webes felületen keresztül, a kollégák feltölthessék egy adott Slack channel-ből kiexportált json fájlt vagy ezen fájlok egy tömörített kollekcióját, és ebből jelenítsünk meg számukra egy kép galériát a böngészőjükben.
+
+== Perszónák
+
+- Shoprenter dolgozó
+
+== Fogalmak
+
+- *Shoprenter dolgozó*: Az alkalmazás felhasználója, aki rendelkezik shoprenter.hu-s email címmel.
+- *Parser*: Egy olyan script, amely képes egy structurált adatokat tartalmazó fájlt felolvasni, értelmezni, majd bizonyos adatokat ebből kiszedni.
+ Egy különálló modulba rendezzük
+- *User*: a Shoprenter dolgozó leképzése domain-re.
+Ugyancsak egy külön modulként szerepel az alkalmazásban, ami authentikálja a Shoprenter dolgozóit, illetve authorizálja a a fájlok feltöltését.
+- *Audit log*: Az utolsó modul, amely egy-egy User ténykedését rögziti, perzisztálja
+- *Slack export file*: Az a fájl, melyet egy adott Slack channel-ből ki tudunk exportálni, és fel tudunk tölteni a Parsernek
+- *Fájl feltöltő felület*: Az alkalmazás azon felülete, ahol fel tudom tölteni a *Slack export fájlomat*
+- *Galéria*: Fájl feltöltő felületen feltöltött export fájlban lévő képeket ide listázzuk ki, közvetlenül feltöltés után
+
+== Story 1
+
+Shoprenter dolgozóként egy bejelentkező felületen keresztül, be tudok lépni a Slackdownloader alkalmazásba, hogy Slack export fájl feltöltő felületet elérjem.
+
+=== Követelmények:
+- Email cím és jelszó magadása után ellenőrizzük le, látogató valóban jogosult-e az alkalmazásba való belépésre
+- Hiba esetén irányítsunk vissza a bejelentkező felületre és jelenítsük meg: "Hibás email cím vagy jelszó!"
+- Sikeres bejelentkezés követően az alkalmazás főoldalára irányítsunk
+- Legyen lelogolva a sikeres bejelentkezés
+
+=== Működés
+
+[source,gherkin]
+----
+@uncovered
+Feature: Slackdownloader sign in
+
+  Scenario: Sign in without registration
+    Given I am not registrated as User
+    And I am on login page
+    When I fill email input with "notexists@shoprenter.hu"
+    And I fill password input with "123qwe"
+    And I submit the login form
+    Then I am on login page
+    And I see error message "Hibás email cím vagy jelszó!"
+
+Scenario: Sign in with wrong email/password
+    Given I am registrated as User
+    And I am on login page
+    When I fill email input with "exists@shoprenter.hu"
+    And I fill password input with "fakepass"
+    And I submit the login form
+    Then I am on login page
+    And I see error message "Hibás email cím vagy jelszó!"
+
+Scenario: Successfully Sign in
+    Given I am registrated as User
+    And I am on login page
+    When I fill email input with "exists@shoprenter.hu"
+    And I fill password input with "123qwe"
+    And I submit the login form
+    Then I am on main page
+
+----
+
+== Story 2
+
+Bejelentkezett felhasználóként szeretnék feltölteni egy Slack export fájlt és abból kilistáztatni a képeket galéria oldalon
+
+=== Követelmények:
+- Slack export file lehet .json vagy .zip kiterjesztésű, mindkettőt kezelnie kell az alkalmazásnak
+- Ha a fájl nem megfelelő formátumú, a fájl feltöltő oldalon jelenítsünk meg egy üzenetet: "Nem megfelelő formátum!"
+- Ha a fájl nem tartalmaz Slack export file-nak megfelelő tartalmat, a fájl feltöltő oldalon jelenítsünk meg egy üzenetet: "Nem Slack export fájlnak megfelelő tartalom!"
+- Logoljuk le a sikeres belépést az adott Shoprenteres dolgozó alapján
+
+=== Működés
+
+[source,gherkin]
+----
+@uncovered
+Feature: Slackdownloader sign in
+
+  Background: I am signed in
+
+  Scenario: Uploading file with wrong file format
+    Given I am on file upload page
+    When I browse file "wrong.txt"
+    And I submit file upload page form
+    Then I see error message "Nem megfelelő formátum!"
+
+  Scenario: Uploading file with wrong content
+    Given I am on file upload page
+    When I browse file "wrong-content.json"
+    And I submit file upload page form
+    Then I see error message "Nem Slack export fájlnak megfelelő tartalom!"
+
+Scenario: Uploading file with fine content
+    Given I am on file upload page
+    When I browse file "slack-content.json"
+    And I submit file upload page form
+    Then I see the galery page
+----
+
+
+=== C4
+
+=== Level 1
+[plantuml]
+----
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(worker, "Shoprenter worker")
+System(slackDownloader, "Slack downloader")
+Rel(worker, slackDownloader, "Sign in and upload export files")
+----
+
+=== Level 2
+
+[plantuml]
+----
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+Person(worker, "Shoprenter worker")
+System_Boundary(slackDownloader, "Slack downloader") {
+    Container(SDFrontend, 'Slack downloader Frontend', 'Vue JS')
+    Container(parser, Parser, 'Php, Symfony Bundle')
+    Container(user, User, 'Php, Symfony Bundle')
+    ContainerDb(userDb, User database, mysql)
+    Container(auditLog, 'Audit Log', 'Php, Symfony Bundle')
+}
+
+Rel(worker, SDFrontend, 'Uploading Slack export files, watching image galery')
+Rel(SDFrontend, parser, 'Slack export file processing')
+Rel(SDFrontend, user, 'handling sign in')
+Rel(parser, user, 'Authenticate/Authorisate User')
+Rel(user, userDb, 'getting Users')
+Rel(parser, auditLog, 'Logging uploding file by User')
+Rel(user, auditLog, "Logging User's Sign in")
+----
+
+=== Level 3
+
+[plantuml]
+----
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+Container(SDFrontend, "Slack downloader Frontend", 'Vue js')
+
+Container_Boundary(parser, 'Parser', 'php, Symfony bundle') {
+    Component(parserController, 'ParserController', 'Symfony Controller')
+    Component(getMemeImagesFromFileHandler, 'getMemeImagesFromFileHandler', 'Application Use Case')
+    Component(securityAdapter, 'Security Adapter', 'Infrastructure adapter')
+}
+Container_Boundary(user, 'User', 'php, Symfony bundle') {
+    Component('securityController', 'SecurityController', 'REST API')
+}
+
+Container_Boundary(auditLog, 'AuditLog', 'php, Symfony bundle') {
+    Component('messageBusListener', 'MessageBusListener', 'Symfony Messenger')
+    Component('logUserSignInHandler', 'LogUserSignInHandler', 'Appplication Use Case')
+    Component('logUserParsingHandler', 'LogUserParsingHandler', 'Appplication Use Case')
+}
+
+ContainerDb(userDb, User Database, mysql)
+ContainerDb(messageBus, Event Message Bus, Symfony Messenger)
+
+Rel(securityController, userDb, 'getting user information')
+Rel(SDFrontend, securityController, 'handling sign in')
+Rel(SDFrontend, parserController, 'handling parsing')
+
+Rel(securityAdapter, securityController, 'authorization')
+
+Rel(getMemeImagesFromFileHandler, securityAdapter, 'authorization')
+
+Rel(parserController, getMemeImagesFromFileHandler, 'parsing images from file')
+
+Rel(messageBusListener, logUserParsingHandler, 'log on parsing event')
+Rel(messageBusListener, logUserSignInHandler, 'log on sign up event')
+
+Rel(getMemeImagesFromFileHandler, messageBus, 'parsing event')
+Rel(securityController, messageBus, 'sign up event')
+Rel(messageBus, messageBusListener, 'event handling')
+
+
+----
+
+
+
+
+
+
+
