@@ -5,29 +5,28 @@ namespace App\Infrastructure\MemeImageParser;
 use App\Domain\MemeImageCollection;
 use App\Domain\MemeImageParserInterface;
 use App\Domain\ValueObject\InputFile;
-use App\Infrastructure\Shared\FileUploader\ExportFile;
-use App\Infrastructure\Shared\FileUploader\FileUploaderInterface;
-use App\Infrastructure\Shared\Reader\Reader;
+use App\Infrastructure\FileReader\FileReaderInterface;
+use App\Infrastructure\FileUploader\TempFile;
+use App\Infrastructure\FileUploader\FileUploaderInterface;
 
 class SlackMemeImageParserAdapter implements MemeImageParserInterface
 {
     private FileUploaderInterface $fileUploader;
-    private Reader $reader;
+    private FileReaderInterface $reader;
 
-    public function __construct(FileUploaderInterface $fileUploader, Reader $reader)
+    public function __construct(FileUploaderInterface $fileUploader, FileReaderInterface $reader)
     {
         $this->fileUploader = $fileUploader;
         $this->reader = $reader;
     }
 
-
     public function getMemeImagesFromFile(InputFile $file): MemeImageCollection
     {
-        $exportFile = new ExportFile(
+        $tempFile = new TempFile(
             $file->getFilePath()
         );
 
-        $uploadedExportFile = $this->fileUploader->uploadFile($exportFile, $file->getFileName());
+        $uploadedExportFile = $this->fileUploader->uploadFile($tempFile, $file->getFileName());
         return $this->reader->getUrls($uploadedExportFile);
     }
 }
