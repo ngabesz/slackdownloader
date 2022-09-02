@@ -1,23 +1,22 @@
 <?php
 
-namespace App\Infrastructure\Shared\Reader;
+namespace App\Infrastructure\FileReader;
 
 use App\Domain\MemeImageCollection;
-use App\Infrastructure\Shared\FileUploader\UploadedExportFile;
+use App\Infrastructure\FileUploader\UploadedExportFile;
 
-class ExtensionAwareReader implements Reader
+class ExtensionAwareFileReader implements FileReaderInterface
 {
-  protected $readers;
+  private $readers;
 
-  public function addReader($extension, $reader){
+  public function addReader($extension, $reader)
+  {
     $this->readers[$extension] = $reader;
   }
 
   public function getUrls(UploadedExportFile $file) : MemeImageCollection
   {
-
     $reader = $this->readers[$file->getExtension()];
-
     return $reader->getUrls($file);
   }
 }
