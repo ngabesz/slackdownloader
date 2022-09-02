@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Infrastructure\Shared\FileUploader;
+namespace App\Infrastructure\FileUploader;
 
 use App\Domain\Exception\DomainException;
 
 use function end;
 use function explode;
+
 use const DIRECTORY_SEPARATOR;
 
-class ExportFile
+class TempFile
 {
     private string $path;
     private string $name;

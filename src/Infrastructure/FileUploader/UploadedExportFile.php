@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Infrastructure\Shared\FileUploader;
+namespace App\Infrastructure\FileUploader;
 
 use App\Domain\Exception\DomainException;
-
 use function end;
 use function explode;
 
@@ -13,31 +12,31 @@ class UploadedExportFile
     private string $extension;
     private string $name;
 
-  public function __construct($path)
-  {
-      $this->path = $path;
-      $this->name = $this->getFileNameFromPath($path);
-      $this->extension = $this->getExtensionFromFilename($this->name);
+    public function __construct($path)
+    {
+        $this->path = $path;
+        $this->name = $this->getFileNameFromPath($path);
+        $this->extension = $this->getExtensionFromFilename($this->name);
 
-      if (!in_array($this->extension, ['zip','json'])){
-        throw new  DomainException('wrong file format');
-      }
-  }
+        if (!in_array($this->extension, ['zip','json'])) {
+            throw new  DomainException('wrong file format');
+        }
+    }
 
-  public function getPath()
-  {
-    return $this->path;
-  }
+    public function getPath(): string
+    {
+        return $this->path;
+    }
 
-  public function getExtension()
-  {
-    return $this->extension;
-  }
+    public function getExtension(): string
+    {
+        return $this->extension;
+    }
 
-  public function getName()
-  {
-    return $this->name;
-  }
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
     private function getFileNameFromPath($path): string
     {
