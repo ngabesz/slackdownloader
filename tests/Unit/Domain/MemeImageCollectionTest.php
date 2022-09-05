@@ -1,11 +1,9 @@
 <?php
 
+namespace App\Tests\Unit\Domain;
 
-namespace Tests;
-
-
-use Domain\MemeImage;
-use Domain\MemeImageCollection;
+use App\Domain\MemeImage;
+use App\Domain\MemeImageCollection;
 use PHPUnit\Framework\TestCase;
 
 class MemeImageCollectionTest extends TestCase

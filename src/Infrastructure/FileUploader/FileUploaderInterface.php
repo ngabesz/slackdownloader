@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\Shared\FileUploader;
+namespace App\Infrastructure\FileUploader;
 
 use App\Domain\Exception\DomainException;
 
@@ -9,5 +9,5 @@ interface FileUploaderInterface
     /**
      * @throws DomainException
      */
-    public function uploadFile(ExportFile $file, $uploadName): UploadedExportFile;
+    public function uploadFile(TempFile $file, $uploadName): UploadedExportFile;
 }

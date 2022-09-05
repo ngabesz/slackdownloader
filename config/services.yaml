@@ -27,12 +27,12 @@ services:
         resource: '../src/Presentation/Web/Controller'
         tags: [ 'controller.service_arguments' ]
 
-    App\Infrastructure\Shared\Reader\ExtensionAwareReader:
+    App\Infrastructure\FileReader\ExtensionAwareFileReader:
         calls:
-            - addReader: ['zip', '@App\Infrastructure\Shared\Reader\ZipReader'],
-            - addReader: ['json', '@App\Infrastructure\Shared\Reader\JsonReader']
+            - addReader: ['zip', '@App\Infrastructure\FileReader\ZipFileReader'],
+            - addReader: ['json', '@App\Infrastructure\FileReader\JsonFileReader']
 
-    App\Infrastructure\Shared\Reader\Reader: '@App\Infrastructure\Shared\Reader\ExtensionAwareReader'
+    App\Infrastructure\FileReader\FileReaderInterface: '@App\Infrastructure\FileReader\ExtensionAwareFileReader'
 
     App\Infrastructure\Shared\Filesystem\LocalFilesystem:
         - '%kernel.project_dir%/upload/'
