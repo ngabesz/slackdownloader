@@ -1,0 +1,7 @@
+file_upload:
+    path: /file/upload
+    controller: App\ParserBundle\Presentation\Web\Controller\FileUploadController::index
+
+file_upload_post:
+    path: /file/upload/post
+    controller: App\ParserBundle\Presentation\Web\Controller\FileUploadController::upload

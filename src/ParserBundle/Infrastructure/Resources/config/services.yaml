@@ -1,0 +1,25 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\ParserBundle\:
+        resource: '../../../../ParserBundle'
+        exclude:
+            - './ParserBundle/DependencyInjection/'
+            - './ParserBundle/Entity/'
+            - './ParserBundle/Kernel.php'
+
+    App\ParserBundle\Presentation\Web\Controller\: # assuming you have namespace like that
+        resource: '../../../Presentation/Web/Controller'
+        tags: [ 'controller.service_arguments' ]
+
+    App\ParserBundle\Infrastructure\FileReader\ExtensionAwareFileReader:
+        calls:
+            -   addReader: [ 'zip', '@App\ParserBundle\Infrastructure\FileReader\ZipFileReader' ],
+            -   addReader: [ 'json', '@App\ParserBundle\Infrastructure\FileReader\JsonFileReader' ]
+
+    App\ParserBundle\Infrastructure\FileReader\FileReaderInterface: '@App\ParserBundle\Infrastructure\FileReader\ExtensionAwareFileReader'
+
+    App\ParserBundle\Infrastructure\Shared\Filesystem\LocalFilesystem:
+        - '%kernel.project_dir%/upload/'
