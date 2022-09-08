@@ -4,4 +4,7 @@
 
 parser:
     resource: '@ParserBundle/Infrastructure/Resources/config/routes.yaml'
-    prefix: /image_upload
+
+remote_user:
+    resource: '@RemoteUserBundle/Infrastructure/Resources/config/routes.yaml'
+    prefix: /remote_user

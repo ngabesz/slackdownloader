@@ -1,18 +1,23 @@
 security:
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+#    password_hashers:
+#        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'plain'
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        users_in_memory: { memory: null }
+        # used to reload user from session & other features (e.g. switch_user)
+        remote_user_provider:
+            id: App\ParserBundle\Infrastructure\Security\UserProvider
     firewalls:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
             lazy: true
-            provider: users_in_memory
+            provider: remote_user_provider
+            form_login:
+                login_path: app_login
+                check_path: app_login_post
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall
@@ -24,7 +29,10 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
         # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/login/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/file/upload/*, roles: ROLE_USER }
+        - { path: ^/remote_user/user/*, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+
 
 when@test:
     security:

@@ -1,0 +1,15 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\RemoteUserBundle\:
+        resource: '../../../../RemoteUserBundle'
+        exclude:
+            - './RemoteUserBundle/DependencyInjection/'
+            - './RemoteUserBundle/Entity/'
+            - './RemoteUserBundle/Kernel.php'
+
+    App\RemoteUserBundle\Presentation\Api\Rest\: # assuming you have namespace like that
+        resource: '../../../Presentation/Api/Rest'
+        tags: [ 'controller.service_arguments' ]

@@ -11,5 +11,6 @@ return [
     Symfony\Bundle\MonologBundle\MonologBundle::class => ['all' => true],
     Symfony\Bundle\MakerBundle\MakerBundle::class => ['dev' => true],
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
-    App\ParserBundle\ParserBundle::class => ['all' => true]
+    App\ParserBundle\ParserBundle::class => ['all' => true],
+    App\RemoteUserBundle\RemoteUserBundle::class => ['all' => true]
 ];
