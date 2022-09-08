@@ -20,7 +20,7 @@ class RemoteUserClient
     public function getRemoteUserByEmail(string $email)
     {
         try {
-            $response = $this->client->post('http://localhost:8002/remote_user/user', [
+            $response = $this->client->post('http://nginx/remote_user/user', [
                 'form_params' => [
                     'email' => $email
                 ],
