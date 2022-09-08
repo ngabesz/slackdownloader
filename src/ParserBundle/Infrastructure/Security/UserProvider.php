@@ -42,6 +42,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         $user->setEmail($response['email']);
         $user->setFirstName($response['firstName']);
         $user->setLastName($response['lastName']);
+        $user->setPassword($response['password']);
 
         return $user;
     }
@@ -71,9 +72,20 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
+        $response = $this->client->getRemoteUserByEmail($user->getEmail());
+
+        $user = new SecureUser();
+        $user->setId($response['id']);
+        $user->setEmail($response['email']);
+        $user->setFirstName($response['firstName']);
+        $user->setLastName($response['lastName']);
+        $user->setPassword($response['password']);
+
+        return $user;
+
         // Return a User object after making sure its data is "fresh".
         // Or throw a UsernameNotFoundException if the user no longer exists.
-        throw new \Exception('TODO: fill in refreshUser() inside '.__FILE__);
+        //throw new \Exception('TODO: fill in refreshUser() inside '.__FILE__);
     }
 
     /**

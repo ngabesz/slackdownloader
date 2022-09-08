@@ -2,14 +2,16 @@
 
 namespace App\ParserBundle\Infrastructure\Security;
 
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
-class SecureUser implements UserInterface
+class SecureUser implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private int $id;
     private ?string $email;
     private string $lastName;
     private string  $firstName;
+    private string $password;
     private $roles = [];
 
     public function getEmail(): ?string
@@ -98,7 +100,12 @@ class SecureUser implements UserInterface
      */
     public function getPassword(): ?string
     {
-        return null;
+        return $this->password;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
     }
 
     /**

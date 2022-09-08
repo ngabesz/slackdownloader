@@ -20,8 +20,13 @@ class RemoteUserClient
     public function getRemoteUserByEmail(string $email)
     {
         try {
-            $response = $this->client->post('http://localhost:8001/remote_user/user', [
-                'email' => $email
+            $response = $this->client->post('http://localhost:8002/remote_user/user', [
+                'form_params' => [
+                    'email' => $email
+                ],
+                'headers' => [
+                    'timeout' => 5
+                ]
             ]);
         } catch (GuzzleException $e) {
             throw new Exception($e->getMessage(), $e->getCode());
