@@ -5,3 +5,11 @@ file_upload:
 file_upload_post:
     path: /file/upload/post
     controller: App\ParserBundle\Presentation\Web\Controller\FileUploadController::upload
+
+app_login:
+    path: /login
+    controller:  App\ParserBundle\Presentation\Web\Controller\LoginController::login
+
+app_login_post:
+    path: /login/post
+    controller:  App\ParserBundle\Presentation\Web\Controller\LoginController::loginPost

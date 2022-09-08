@@ -1,0 +1,7 @@
+get_user:
+    path: /user
+    controller: App\RemoteUserBundle\Presentation\Api\Rest\UserApiController::getAction
+
+auth_user:
+    path: /user/auth
+    controller: App\RemoteUserBundle\Presentation\Api\Rest\UserApiController::authAction
