@@ -11,11 +11,11 @@ log_message()
 
 
 log_message "Stopping containers..."
-docker-compose -p ${PROJECT_NAME} stop
+docker compose -p ${PROJECT_NAME} stop
 
 log_message "Removing containers..."
-docker-compose -p ${PROJECT_NAME} rm -f
+docker compose -p ${PROJECT_NAME} rm -f
 
 log_message "Starting containers..."
-docker-compose -p ${PROJECT_NAME} up -d --remove-orphans --build
+docker compose -p ${PROJECT_NAME} up -d --remove-orphans --build
 
