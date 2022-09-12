@@ -14,7 +14,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         parent::__construct($registry, User::class);
     }
 
-    public function getUserByCredentials(string $email, string $password): User
+    public function getUserByCredentials(string $email, string $password): ?User
     {
         return $this->findOneBy([
            'email' => $email,
@@ -22,7 +22,7 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
         ]);
     }
 
-    public function getUserByEmail(string $email): User
+    public function getUserByEmail(string $email): ?User
     {
         return $this->findOneBy([
             'email' => $email

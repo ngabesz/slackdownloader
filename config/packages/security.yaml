@@ -14,11 +14,13 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
         main:
+            custom_authenticators:
+             - App\ParserBundle\Infrastructure\Security\ShoprenterWorkerAuthenticator
             lazy: true
             provider: remote_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
+                #form_login:
+                #login_path: app_login
+            #check_path: app_login
             logout:
                 path: app_logout
                 target: file_upload

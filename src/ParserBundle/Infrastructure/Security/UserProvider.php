@@ -35,7 +35,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
         // it is whatever value is being returned by the getUserIdentifier()
         // method in your User class.
 
-        $response = $this->client->getRemoteUserByEmail($identifier);
+        $response = $this->client->getWorkerByEmail($identifier);
 
         $user = new SecureUser();
         $user->setId($response['id']);
@@ -72,7 +72,7 @@ class UserProvider implements UserProviderInterface, PasswordUpgraderInterface
             throw new UnsupportedUserException(sprintf('Invalid user class "%s".', get_class($user)));
         }
 
-        $response = $this->client->getRemoteUserByEmail($user->getEmail());
+        $response = $this->client->getWorkerByEmail($user->getEmail());
 
         $user = new SecureUser();
         $user->setId($response['id']);

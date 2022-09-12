@@ -3,6 +3,7 @@
 namespace App\RemoteUserBundle\Application\GetUserByCredentials;
 
 use App\RemoteUserBundle\Domain\User;
+use App\RemoteUserBundle\Domain\UserNotFoundException;
 use App\RemoteUserBundle\Domain\UserRepositoryInterface;
 
 class GetUserByCredentialHandler
@@ -16,6 +17,12 @@ class GetUserByCredentialHandler
 
     public function execute(GetUserByCredentialQuery $query): User
     {
-        return $this->userRepository->getUserByCredentials($query->getUserName(), $query->getPassword());
+        $user = $this->userRepository->getUserByCredentials($query->getUserName(), $query->getPassword());
+
+        if (!$user){
+          throw new UserNotFoundException();
+        }
+
+        return $user;
     }
 }

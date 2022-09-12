@@ -6,6 +6,7 @@ use App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialHan
 use App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialQuery;
 use App\RemoteUserBundle\Application\GetUserByEmail\GetUserByEmailHandler;
 use App\RemoteUserBundle\Application\GetUserByEmail\GetUserByEmailQuery;
+use App\RemoteUserBundle\Domain\UserNotFoundException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +15,18 @@ class UserApiController extends AbstractController
 {
     public function getAction(Request $request, GetUserByEmailHandler $handler)
     {
+
         $email = $request->get('email');
 
-        $user = $handler->execute(new GetUserByEmailQuery(
-            $email
-        ));
+        try {
+            $user = $handler->execute(new GetUserByEmailQuery(
+                $email
+            ));
+        } catch (UserNotFoundException $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage()
+            ], 404);
+        }
 
         return new JsonResponse([
             'id' => $user->getId(),
@@ -31,13 +39,20 @@ class UserApiController extends AbstractController
 
     public function authAction(Request $request, GetUserByCredentialHandler $handler)
     {
+
         $email = $request->get('email');
         $password = $request->get('password');
 
-        $user = $handler->execute(new GetUserByCredentialQuery(
-            $email,
-            $password
-        ));
+        try {
+            $user = $handler->execute(new GetUserByCredentialQuery(
+                $email,
+                $password
+            ));
+        } catch (UserNotFoundException $e) {
+            return new JsonResponse([
+                'message' => $e->getMessage()
+            ], 404);
+        }
 
         return new JsonResponse([
             'id' => $user->getId(),
