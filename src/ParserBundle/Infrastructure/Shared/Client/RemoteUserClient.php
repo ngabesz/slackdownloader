@@ -21,7 +21,7 @@ class RemoteUserClient
     public function getWorkerByEmail(string $email)
     {
         try {
-            $response = $this->client->post('http://nginx/remote_user/user', [
+            $response = $this->client->post('http://nginx/remote_user/user/by_email', [
                 'form_params' => [
                     'email' => $email
                 ],
