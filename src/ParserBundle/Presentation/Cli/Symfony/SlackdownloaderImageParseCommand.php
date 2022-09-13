@@ -2,6 +2,9 @@
 
 namespace App\ParserBundle\Presentation\Cli\Symfony;
 
+use App\ParserBundle\Application\AuthenticateShoprenterWorker\AuthenticateShoprenterWorkerHandler;
+use App\ParserBundle\Application\AuthenticateShoprenterWorker\AuthenticateShoprenterWorkerQuery;
+use App\ParserBundle\Application\Exception\ApplicationException;
 use App\ParserBundle\Application\GetImagesFromFile\GetImagesFromFileHandler;
 use App\ParserBundle\Application\GetImagesFromFile\GetImagesFromFileQuery;
 use App\ParserBundle\Domain\MemeImage;
@@ -19,16 +22,22 @@ class SlackdownloaderImageParseCommand extends Command
     protected static $defaultDescription = 'It parsing urls form slack file';
 
     private GetImagesFromFileHandler $getImagesFromFileHandler;
+    private AuthenticateShoprenterWorkerHandler $authenticateShoprenterWorkerHandler;
 
-    public function __construct(GetImagesFromFileHandler $getImagesFromFileHandler)
-    {
+    public function __construct(
+        GetImagesFromFileHandler $getImagesFromFileHandler,
+        AuthenticateShoprenterWorkerHandler $authenticateShoprenterWorkerHandler
+    ) {
         parent::__construct();
         $this->getImagesFromFileHandler = $getImagesFromFileHandler;
+        $this->authenticateShoprenterWorkerHandler = $authenticateShoprenterWorkerHandler;
     }
 
     protected function configure(): void
     {
         $this
+            ->addArgument('username', InputArgument::REQUIRED, 'Username')
+            ->addArgument('password', InputArgument::REQUIRED, 'Password')
             ->addArgument('filePath', InputArgument::REQUIRED, 'File path what is relative to command')
         ;
     }
@@ -39,9 +48,20 @@ class SlackdownloaderImageParseCommand extends Command
 
         $filePath = $input->getArgument('filePath');
 
+        try {
+            $worker = $this->authenticateShoprenterWorkerHandler->execute(new AuthenticateShoprenterWorkerQuery(
+                $input->getArgument('username'),
+                $input->getArgument('password')
+            ));
+        } catch (ApplicationException $e) {
+            $io->error('Access Denied! ' . $e->getMessage());
+            return Command::FAILURE;
+        }
+
         $urls = $this->getImagesFromFileHandler->execute(new GetImagesFromFileQuery(
             $filePath,
-            'uploadedFile_' . time() . '.json'
+            'uploadedFile_' . time() . '.json',
+            $worker->getId()
         ));
 
         /** @var MemeImage $url */

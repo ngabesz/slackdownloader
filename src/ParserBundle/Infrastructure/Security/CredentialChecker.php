@@ -2,24 +2,28 @@
 
 namespace App\ParserBundle\Infrastructure\Security;
 
-use App\ParserBundle\Infrastructure\Shared\Client\RemoteUserClient;
+use App\ParserBundle\Application\AuthenticateShoprenterWorker\AuthenticateShoprenterWorkerHandler;
+use App\ParserBundle\Application\AuthenticateShoprenterWorker\AuthenticateShoprenterWorkerQuery;
+use Exception;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class CredentialChecker
 {
+    private AuthenticateShoprenterWorkerHandler $handler;
 
-    protected RemoteUserClient $client;
-
-    public function __construct(RemoteUserClient $client)
+    public function __construct(AuthenticateShoprenterWorkerHandler $handler)
     {
-        $this->client = $client;
+        $this->handler = $handler;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
         try {
-            $this->client->authenticate($credentials['username'], $credentials['password']);
-        } catch (\Exception $e) {
+            $this->handler->execute(new AuthenticateShoprenterWorkerQuery(
+                $credentials['username'],
+                $credentials['password']
+            ));
+        } catch (Exception $e) {
             return false;
         }
 

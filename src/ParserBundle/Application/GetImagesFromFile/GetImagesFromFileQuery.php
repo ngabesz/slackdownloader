@@ -4,31 +4,23 @@ namespace App\ParserBundle\Application\GetImagesFromFile;
 
 class GetImagesFromFileQuery
 {
-    private string $workerUserName;
-    private string $workerPassword;
     private string $filePath;
     private string $fileName;
+    private int $workerId;
 
     public function __construct(
-        string $workerUserName,
-        string $workerPassword,
         string $filePath,
-        string $fileName
+        string $fileName,
+        int $workerId
     ) {
-        $this->workerUserName = $workerUserName;
-        $this->workerPassword = $workerPassword;
         $this->filePath = $filePath;
         $this->fileName = $fileName;
+        $this->workerId = $workerId;
     }
 
-    public function getWorkerUserName(): string
+    public function getWorkerId(): int
     {
-        return $this->workerUserName;
-    }
-
-    public function getWorkerPassword(): string
-    {
-        return $this->workerPassword;
+        return $this->workerId;
     }
 
     public function getFilePath(): string

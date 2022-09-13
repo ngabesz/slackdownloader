@@ -28,10 +28,7 @@ class GetImagesFromFileHandler
 
     public function execute(GetImagesFromFileQuery $query): MemeImageCollection
     {
-        $worker = $this->workerRepository->getByCredentials(
-            $query->getWorkerUserName(),
-            $query->getWorkerPassword()
-        );
+        $worker = $this->workerRepository->getById($query->getWorkerId());
 
         $collection =  $this->parser->getMemeImagesFromFile(new InputFile(
             $query->getFilePath(),
@@ -40,7 +37,7 @@ class GetImagesFromFileHandler
 
         $this->dispatcher->dispatchUserActivityEvent(new UserParsedImagesEvent(
             $worker->getId(),
-            new DateTimeImmutable()
+            new DateTimeImmutable(),
         ));
 
         return $collection;

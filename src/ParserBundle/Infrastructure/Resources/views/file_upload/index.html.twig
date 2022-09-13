@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello {{ userName }}{% endblock %}
+{% block title %}Hello {{ fullName }}{% endblock %}
 
 {% block body %}
-    <h1>Hello {{ firstName }} {{ lastName }} </h1>
+    <h1>Hello {{ fullName }} </h1>
     <a href="{{ path('app_logout') }}">Logout</a>
 <form action="{{ url('file_upload_post') }}" method="post" enctype="multipart/form-data">
     <div>Slack Json vagy Zip export file, max 8 MB:</div>

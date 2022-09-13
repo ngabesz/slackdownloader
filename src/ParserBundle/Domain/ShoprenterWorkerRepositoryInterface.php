@@ -9,5 +9,10 @@ interface ShoprenterWorkerRepositoryInterface
     /**
      * @throws DomainException
      */
-    public function getByCredentials(string $username, string $password): ShoprenterWorker;
+    public function authenticate(string $username, string $password): ShoprenterWorker;
+
+    /**
+     * @throws DomainException
+     */
+    public function getById(int $id): ShoprenterWorker;
 }

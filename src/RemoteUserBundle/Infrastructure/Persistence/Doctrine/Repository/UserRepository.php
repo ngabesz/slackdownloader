@@ -28,4 +28,9 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
             'email' => $email
         ]);
     }
+
+    public function getUserById(int $userId): ?User
+    {
+        return $this->find($userId);
+    }
 }

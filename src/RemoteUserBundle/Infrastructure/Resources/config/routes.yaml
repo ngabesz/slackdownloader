@@ -1,7 +1,14 @@
-get_user:
-    path: /user
-    controller: App\RemoteUserBundle\Presentation\Api\Rest\UserApiController::getAction
+get_user_by_email:
+    path: /user/by_email
+    controller: App\RemoteUserBundle\Presentation\Api\Rest\UserApiController::getByEmailAction
+    methods: POST
+
+get_user_by_id:
+    path: /user/{userId}
+    controller: App\RemoteUserBundle\Presentation\Api\Rest\UserApiController::getByIdAction
+    methods: GET
 
 auth_user:
     path: /user/auth
     controller: App\RemoteUserBundle\Presentation\Api\Rest\UserApiController::authAction
+    methods: POST

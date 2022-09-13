@@ -2,10 +2,10 @@
 
 namespace App\RemoteUserBundle\Application\GetUserByCredentials;
 
+use App\RemoteUserBundle\Application\Exception\UserNotFoundException;
 use App\RemoteUserBundle\Domain\Event\DomainEventDispatcherInterface;
 use App\RemoteUserBundle\Domain\Event\UserLoggedInEvent;
 use App\RemoteUserBundle\Domain\User;
-use App\RemoteUserBundle\Domain\UserNotFoundException;
 use App\RemoteUserBundle\Domain\UserRepositoryInterface;
 use DateTimeImmutable;
 
@@ -27,7 +27,7 @@ class GetUserByCredentialHandler
         $user = $this->userRepository->getUserByCredentials($query->getUserName(), $query->getPassword());
 
         if (!$user){
-          throw new UserNotFoundException();
+          throw new UserNotFoundException($query->getUserName());
         }
 
         $this->dispatcher->dispatchUserActivityEvent(new UserLoggedInEvent(

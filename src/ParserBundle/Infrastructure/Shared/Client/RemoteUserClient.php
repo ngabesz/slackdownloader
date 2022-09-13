@@ -54,4 +54,19 @@ class RemoteUserClient
 
         return json_decode($response->getBody()->getContents(), true);
     }
+
+    public function getWorkerById(int $id)
+    {
+        try {
+            $response = $this->client->get('http://nginx/remote_user/user/' . $id, [
+                'headers' => [
+                    'timeout' => 5
+                ]
+            ]);
+        } catch (GuzzleException $e) {
+            throw new Exception($e->getMessage(), $e->getCode());
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
 }

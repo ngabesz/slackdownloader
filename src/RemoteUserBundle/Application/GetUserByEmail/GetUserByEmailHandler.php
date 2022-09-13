@@ -2,8 +2,8 @@
 
 namespace App\RemoteUserBundle\Application\GetUserByEmail;
 
+use App\RemoteUserBundle\Application\Exception\UserNotFoundException;
 use App\RemoteUserBundle\Domain\User;
-use App\RemoteUserBundle\Domain\UserNotFoundException;
 use App\RemoteUserBundle\Domain\UserRepositoryInterface;
 
 class GetUserByEmailHandler

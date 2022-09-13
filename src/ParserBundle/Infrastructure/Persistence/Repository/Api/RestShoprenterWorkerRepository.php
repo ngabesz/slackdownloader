@@ -17,12 +17,27 @@ class RestShoprenterWorkerRepository implements ShoprenterWorkerRepositoryInterf
         $this->client = $client;
     }
 
-    public function getByCredentials(string $username, string $password): ShoprenterWorker
+    public function authenticate(string $username, string $password): ShoprenterWorker
     {
         try {
             $response = $this->client->authenticate($username, $password);
         } catch (Exception $e) {
-            throw new DomainException('Shoprenter worker is not found: ' . $username);
+            throw new DomainException($e->getMessage());
+        }
+
+        return new ShoprenterWorker(
+            $response['id'],
+            $response['firstName'],
+            $response['lastName']
+        );
+    }
+
+    public function getById(int $id): ShoprenterWorker
+    {
+        try {
+            $response = $this->client->getWorkerById($id);
+        } catch (Exception $e) {
+            throw new DomainException('Shoprenter worker is not found with id: ' . $id);
         }
 
         return new ShoprenterWorker(
