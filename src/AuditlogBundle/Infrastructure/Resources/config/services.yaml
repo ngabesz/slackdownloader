@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\AuditlogBundle\:
+        resource: '../../../../AuditlogBundle'
+        exclude:
+            - './AuditlogBundle/DependencyInjection/'
+            - './AuditlogBundle/Entity/'
+            - './AuditlogBundle/Kernel.php'
+
+    App\AuditlogBundle\Infrastructure\Event\ContextTransferEventHandler:
+        tags:
+            -   name: messenger.message_handler
+                handles: App\Shared\Infrastructure\Event\ContextTransferEvent

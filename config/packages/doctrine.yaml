@@ -16,6 +16,12 @@ doctrine:
                 dir: 'Infrastructure/Persistence/Doctrine/Orm'
                 prefix: 'App\RemoteUserBundle\Domain'
                 alias: RemoteUser
+            AuditlogBundle:
+                type: xml
+                is_bundle: true
+                dir: 'Infrastructure/Persistence/Doctrine/Orm'
+                prefix: 'App\AuditlogBundle\Domain'
+                alias: Auditlog
 
 when@test:
     doctrine:

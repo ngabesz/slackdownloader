@@ -1,13 +1,11 @@
 <?php
 
-namespace App\ParserBundle\Infrastructure\Security;
+namespace App\ParserBundle\Infrastructure\Shared\Client;
 
-use App\ParserBundle\Domain\ShoprenterWorker;
 use App\ParserBundle\Domain\ShoprenterWorkerService;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-
 use function json_decode;
 
 class RemoteUserClient
@@ -38,7 +36,7 @@ class RemoteUserClient
         return json_decode($response->getBody()->getContents(), true);
     }
 
-    public function authenticate($username, $password)
+    public function authenticate($username, $password): array
     {
         try {
             $response = $this->client->post('http://nginx/remote_user/user/auth', [

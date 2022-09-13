@@ -33,6 +33,8 @@ class FileUploadController extends AbstractController
         $user = $this->getUser();
 
         $urls = $handler->execute(new GetImagesFromFileQuery(
+            $user->getEmail(),
+            $user->getPassword(),
             $file->getPathname(),
             $file->getClientOriginalName()
         ));

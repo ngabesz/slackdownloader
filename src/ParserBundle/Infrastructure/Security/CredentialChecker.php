@@ -1,11 +1,8 @@
 <?php
 
-
 namespace App\ParserBundle\Infrastructure\Security;
 
-
-use App\RemoteUserBundle\Domain\UserNotFoundException;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use App\ParserBundle\Infrastructure\Shared\Client\RemoteUserClient;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class CredentialChecker
@@ -21,7 +18,7 @@ class CredentialChecker
     public function checkCredentials($credentials, UserInterface $user)
     {
         try {
-            $response = $this->client->authenticate($credentials['username'], $credentials['password']);
+            $this->client->authenticate($credentials['username'], $credentials['password']);
         } catch (\Exception $e) {
             return false;
         }
