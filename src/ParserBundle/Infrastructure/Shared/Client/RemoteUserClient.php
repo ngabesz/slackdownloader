@@ -2,10 +2,10 @@
 
 namespace App\ParserBundle\Infrastructure\Shared\Client;
 
-use App\ParserBundle\Domain\ShoprenterWorkerService;
 use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+
 use function json_decode;
 
 class RemoteUserClient
