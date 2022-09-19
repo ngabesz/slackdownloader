@@ -3,27 +3,36 @@
 namespace App\RemoteUserBundle\Presentation\Api\Rest;
 
 use App\RemoteUserBundle\Application\Exception\UserNotFoundException;
-use App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialHandler;
-use App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialQuery;
+use App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialsHandler;
+use App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialsQuery;
 use App\RemoteUserBundle\Application\GetUserByEmail\GetUserByEmailHandler;
 use App\RemoteUserBundle\Application\GetUserByEmail\GetUserByEmailQuery;
 use App\RemoteUserBundle\Application\GetUserById\GetUserByIdHandler;
 use App\RemoteUserBundle\Application\GetUserById\GetUserByIdQuery;
+use App\RemoteUserBundle\Domain\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Messenger\HandleTrait;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class UserApiController extends AbstractController
 {
-    public function getByEmailAction(Request $request, GetUserByEmailHandler $handler)
+    use HandleTrait;
+
+    public function __construct(MessageBusInterface $queryBus)
+    {
+        $this->messageBus = $queryBus;
+    }
+
+    public function getByEmailAction(Request $request)
     {
 
         $email = $request->get('email');
 
         try {
-            $user = $handler->execute(new GetUserByEmailQuery(
-                $email
-            ));
+            /** @var User $user */
+            $user = $this->handle(new GetUserByEmailQuery($email));
         } catch (UserNotFoundException $e) {
             return new JsonResponse([
                 'message' => $e->getMessage()
@@ -39,14 +48,15 @@ class UserApiController extends AbstractController
         ], 200);
     }
 
-    public function authAction(Request $request, GetUserByCredentialHandler $handler)
+    public function authAction(Request $request)
     {
 
         $email = $request->get('email');
         $password = $request->get('password');
 
         try {
-            $user = $handler->execute(new GetUserByCredentialQuery(
+            /** @var User $user */
+            $user = $this->handle(new GetUserByCredentialsQuery(
                 $email,
                 $password
             ));
@@ -64,11 +74,12 @@ class UserApiController extends AbstractController
         ], 200);
     }
 
-    public function getByIdAction(int $userId, GetUserByIdHandler $handler)
+    public function getByIdAction(int $userId)
     {
 
         try {
-            $user = $handler->execute(new GetUserByIdQuery($userId));
+            /** @var User $user */
+            $user = $this->handle(new GetUserByIdQuery($userId));
         } catch (UserNotFoundException $e) {
             return new JsonResponse([
                 'message' => $e->getMessage()

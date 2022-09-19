@@ -14,7 +14,7 @@ class LogUserEventHandler
         $this->repository = $repository;
     }
 
-    public function execute(LogUserEventCommand $command): void
+    public function __invoke(LogUserEventCommand $command): void
     {
         $newLog = new Auditlog();
         $newLog->setEventName($command->getEventName());

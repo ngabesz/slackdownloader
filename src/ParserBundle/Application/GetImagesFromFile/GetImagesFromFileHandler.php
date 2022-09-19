@@ -4,9 +4,9 @@ namespace App\ParserBundle\Application\GetImagesFromFile;
 
 use App\ParserBundle\Domain\Event\DomainEventDispatcherInterface;
 use App\ParserBundle\Domain\Event\UserParsedImagesEvent;
+use App\ParserBundle\Domain\MemeImageCollection;
 use App\ParserBundle\Domain\ShoprenterWorkerRepositoryInterface;
 use App\ParserBundle\Domain\ValueObject\InputFile;
-use App\ParserBundle\Domain\MemeImageCollection;
 use App\ParserBundle\Domain\MemeImageParserInterface;
 use DateTimeImmutable;
 
@@ -26,7 +26,7 @@ class GetImagesFromFileHandler
         $this->workerRepository = $workerRepository;
     }
 
-    public function execute(GetImagesFromFileQuery $query): MemeImageCollection
+    public function __invoke(GetImagesFromFileQuery $query): MemeImageCollection
     {
         $worker = $this->workerRepository->getById($query->getWorkerId());
 

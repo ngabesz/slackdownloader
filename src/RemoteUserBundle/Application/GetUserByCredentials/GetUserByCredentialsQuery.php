@@ -2,7 +2,7 @@
 
 namespace App\RemoteUserBundle\Application\GetUserByCredentials;
 
-class GetUserByCredentialQuery
+class GetUserByCredentialsQuery
 {
     private string $userName;
     private string $password;

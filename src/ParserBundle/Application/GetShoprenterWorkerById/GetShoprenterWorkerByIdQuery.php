@@ -1,6 +1,6 @@
 <?php
 
-namespace App\ParserBundle\Application\GetShoprenterWorkerbyId;
+namespace App\ParserBundle\Application\GetShoprenterWorkerById;
 
 class GetShoprenterWorkerByIdQuery
 {

@@ -13,9 +13,9 @@ class DomainEventDispatcherAdapter implements DomainEventDispatcherInterface
 {
     private MessageBusInterface $bus;
 
-    public function __construct(MessageBusInterface $bus)
+    public function __construct(MessageBusInterface $eventBus)
     {
-        $this->bus = $bus;
+        $this->bus = $eventBus;
     }
 
     public function dispatchUserActivityEvent(UserActivitiesEventInterface $event): void

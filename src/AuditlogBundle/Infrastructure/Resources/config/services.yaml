@@ -10,7 +10,16 @@ services:
             - './AuditlogBundle/Entity/'
             - './AuditlogBundle/Kernel.php'
 
+
+    App\AuditlogBundle\Application\LogUserEvent\LogUserEventHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: command.bus
+                handles: App\AuditlogBundle\Application\LogUserEvent\LogUserEventCommand
+
+
     App\AuditlogBundle\Infrastructure\Event\ContextTransferEventHandler:
         tags:
             -   name: messenger.message_handler
+                bus: event.bus
                 handles: App\Shared\Infrastructure\Event\ContextTransferEvent

@@ -16,7 +16,7 @@ class AuthenticateShoprenterWorkerHandler
         $this->workerRepository = $workerRepository;
     }
 
-    public function execute(AuthenticateShoprenterWorkerQuery $query): ShoprenterWorker
+    public function __invoke(AuthenticateShoprenterWorkerQuery $query): ShoprenterWorker
     {
         try {
             return $this->workerRepository->authenticate(

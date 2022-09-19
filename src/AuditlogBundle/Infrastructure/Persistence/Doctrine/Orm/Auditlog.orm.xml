@@ -14,6 +14,6 @@
 
         <field name="userId" type="integer" length="11" column="user_id"/>
         <field name="eventName" type="string" column="event_name"/>
-        <field name="happenedAt" type="time"/>
+        <field name="happenedAt" type="datetime_immutable"/>
     </entity>
 </doctrine-mapping>

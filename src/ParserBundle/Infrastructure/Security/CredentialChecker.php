@@ -2,24 +2,24 @@
 
 namespace App\ParserBundle\Infrastructure\Security;
 
-use App\ParserBundle\Application\AuthenticateShoprenterWorker\AuthenticateShoprenterWorkerHandler;
 use App\ParserBundle\Application\AuthenticateShoprenterWorker\AuthenticateShoprenterWorkerQuery;
 use Exception;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 class CredentialChecker
 {
-    private AuthenticateShoprenterWorkerHandler $handler;
+    private MessageBusInterface $queryBus;
 
-    public function __construct(AuthenticateShoprenterWorkerHandler $handler)
+    public function __construct(MessageBusInterface $queryBus)
     {
-        $this->handler = $handler;
+        $this->queryBus = $queryBus;
     }
 
     public function checkCredentials($credentials, UserInterface $user)
     {
         try {
-            $this->handler->execute(new AuthenticateShoprenterWorkerQuery(
+            $this->queryBus->dispatch(new AuthenticateShoprenterWorkerQuery(
                 $credentials['username'],
                 $credentials['password']
             ));

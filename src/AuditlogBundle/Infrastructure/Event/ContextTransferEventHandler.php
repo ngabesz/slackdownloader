@@ -3,19 +3,20 @@
 namespace App\AuditlogBundle\Infrastructure\Event;
 
 use App\AuditlogBundle\Application\LogUserEvent\LogUserEventCommand;
-use App\AuditlogBundle\Application\LogUserEvent\LogUserEventHandler;
 use App\Shared\Infrastructure\Event\ContextTransferEvent;
 use Exception;
+use Symfony\Component\Messenger\HandleTrait;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 use function array_key_exists;
 
 class ContextTransferEventHandler
 {
-    private LogUserEventHandler $handler;
+    use HandleTrait;
 
-    public function __construct(LogUserEventHandler $handler)
+    public function __construct(MessageBusInterface $commandBus)
     {
-        $this->handler = $handler;
+        $this->messageBus = $commandBus;
     }
 
     public function __invoke(ContextTransferEvent $event): void
@@ -26,7 +27,7 @@ class ContextTransferEventHandler
             throw new Exception('ContextTransferEventHandler | Required data is missing: userId');
         }
 
-        $this->handler->execute(new LogUserEventCommand(
+        $this->handle(new LogUserEventCommand(
             $data['userId'],
             $event->getEventName(),
             $event->getHappenedAt()

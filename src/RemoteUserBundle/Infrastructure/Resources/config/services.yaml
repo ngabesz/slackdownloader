@@ -13,3 +13,21 @@ services:
     App\RemoteUserBundle\Presentation\Api\Rest\: # assuming you have namespace like that
         resource: '../../../Presentation/Api/Rest'
         tags: [ 'controller.service_arguments' ]
+
+    App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialsHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: query.bus
+                handles: App\RemoteUserBundle\Application\GetUserByCredentials\GetUserByCredentialsQuery
+
+    App\RemoteUserBundle\Application\GetUserByEmail\GetUserByEmailHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: query.bus
+                handles: App\RemoteUserBundle\Application\GetUserByEmail\GetUserByEmailQuery
+
+    App\RemoteUserBundle\Application\GetUserById\GetUserByIdHandler:
+        tags:
+            -   name: messenger.message_handler
+                bus: query.bus
+                handles: App\RemoteUserBundle\Application\GetUserById\GetUserByIdQuery

@@ -2,9 +2,7 @@
 
 namespace App\RemoteUserBundle\Application\GetUserById;
 
-use App\ParserBundle\Application\Exception\ApplicationException;
 use App\RemoteUserBundle\Application\Exception\UserNotFoundException;
-use App\RemoteUserBundle\Domain\User;
 use App\RemoteUserBundle\Domain\UserRepositoryInterface;
 
 class GetUserByIdHandler
@@ -16,7 +14,7 @@ class GetUserByIdHandler
         $this->repository = $repository;
     }
 
-    public function execute(GetUserByIdQuery $query): User
+    public function __invoke(GetUserByIdQuery $query)
     {
         $userId = $query->getId();
 
