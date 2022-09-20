@@ -3,6 +3,12 @@
 {% block title %}Hello {{ fullName }}{% endblock %}
 
 {% block body %}
+    {% if errors %}
+        {% for error in errors %}
+            <h5>{{ error }}</h5>
+        {% endfor %}
+    {% endif %}
+
     <h1>Hello {{ fullName }} </h1>
     <a href="{{ path('app_logout') }}">Logout</a>
 <form action="{{ url('file_upload_post') }}" method="post" enctype="multipart/form-data">

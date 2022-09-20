@@ -2,8 +2,10 @@
 
 namespace App\ParserBundle\Application\GetImagesFromFile;
 
+use App\ParserBundle\Application\Exception\ApplicationException;
 use App\ParserBundle\Domain\Event\DomainEventDispatcherInterface;
 use App\ParserBundle\Domain\Event\UserParsedImagesEvent;
+use App\ParserBundle\Domain\Exception\DomainException;
 use App\ParserBundle\Domain\MemeImageCollection;
 use App\ParserBundle\Domain\ShoprenterWorkerRepositoryInterface;
 use App\ParserBundle\Domain\ValueObject\InputFile;
@@ -26,14 +28,21 @@ class GetImagesFromFileHandler
         $this->workerRepository = $workerRepository;
     }
 
+    /**
+     * @throws ApplicationException
+     */
     public function __invoke(GetImagesFromFileQuery $query): MemeImageCollection
     {
         $worker = $this->workerRepository->getById($query->getWorkerId());
 
-        $collection =  $this->parser->getMemeImagesFromFile(new InputFile(
-            $query->getFilePath(),
-            $query->getFileName()
-        ));
+        try {
+            $collection = $this->parser->getMemeImagesFromFile(new InputFile(
+                $query->getFilePath(),
+                $query->getFileName()
+            ));
+        } catch (DomainException $e) {
+            throw new ApplicationException($e->getMessage(), $e->getCode());
+        }
 
         $this->dispatcher->dispatchUserActivityEvent(new UserParsedImagesEvent(
             $worker->getId(),

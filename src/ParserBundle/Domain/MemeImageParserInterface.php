@@ -2,8 +2,8 @@
 
 namespace App\ParserBundle\Domain;
 
+use App\ParserBundle\Domain\Exception\DomainException;
 use App\ParserBundle\Domain\ValueObject\InputFile;
-use DomainException;
 
 interface MemeImageParserInterface
 {

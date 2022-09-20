@@ -2,15 +2,20 @@
 
 namespace App\ParserBundle\Presentation\Web\Controller;
 
+use App\ParserBundle\Application\Exception\ApplicationException;
 use App\ParserBundle\Application\GetImagesFromFile\GetImagesFromFileQuery;
 use App\ParserBundle\Application\GetShoprenterWorkerById\GetShoprenterWorkerByIdQuery;
 use App\ParserBundle\Domain\ShoprenterWorker;
+use Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
+use Symfony\Component\Messenger\Exception\HandlerFailedException;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Throwable;
 
 class FileUploadController extends AbstractController
 {
@@ -21,13 +26,16 @@ class FileUploadController extends AbstractController
         $this->messageBus = $queryBus;
     }
 
-    public function index(): Response
+    public function index(Session $session): Response
     {
         /** @var ShoprenterWorker $worker */
         $worker = $this->handle(new GetShoprenterWorkerByIdQuery($this->getUser()->getId()));
 
+        $errors = $session->getFlashBag()->get('error', []);
+
         return $this->render('file_upload/index.html.twig',[
-            'fullName' => $worker->getFullName()
+            'fullName' => $worker->getFullName(),
+            'errors' => $errors
         ]);
     }
 
@@ -39,11 +47,17 @@ class FileUploadController extends AbstractController
         /** @var ShoprenterWorker $worker */
         $worker = $this->handle(new GetShoprenterWorkerByIdQuery($this->getUser()->getId()));
 
-        $urls = $this->handle(new GetImagesFromFileQuery(
-            $file->getPathname(),
-            $file->getClientOriginalName(),
-            $worker->getId()
-        ));
+        try {
+            $urls = $this->handle(new GetImagesFromFileQuery(
+                $file->getPathname(),
+                $file->getClientOriginalName(),
+                $worker->getId()
+            ));
+        } catch (HandlerFailedException $exception) {
+            $this->addFlash('error', $exception->getPrevious()->getMessage());
+            return $this->redirectToRoute('file_upload');
+        }
+
 
         return $this->render('file_upload/list.html.twig',[
             'urls' => $urls
