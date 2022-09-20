@@ -42,9 +42,9 @@ Shoprenter dolgozóként egy bejelentkező felületen keresztül, be tudok lépn
 [source,gherkin]
 ----
 @uncovered
-Feature: Slackdownloader sign in
+Feature: Slackdownloader log in
 
-  Scenario: Sign in without registration
+  Scenario: log in without registration
     Given I am not registrated as User
     And I am on login page
     When I fill email input with "notexists@shoprenter.hu"
@@ -53,7 +53,7 @@ Feature: Slackdownloader sign in
     Then I am on login page
     And I see error message "Hibás email cím vagy jelszó!"
 
-Scenario: Sign in with wrong email/password
+Scenario: log in with wrong email/password
     Given I am registrated as User
     And I am on login page
     When I fill email input with "exists@shoprenter.hu"
@@ -62,7 +62,7 @@ Scenario: Sign in with wrong email/password
     Then I am on login page
     And I see error message "Hibás email cím vagy jelszó!"
 
-Scenario: Successfully Sign in
+Scenario: Successfully log in
     Given I am registrated as User
     And my name is "Kubu"
     And I am on login page
@@ -89,7 +89,7 @@ Bejelentkezett felhasználóként szeretnék feltölteni egy Slack export fájlt
 [source,gherkin]
 ----
 @uncovered
-Feature: Slackdownloader sign in
+Feature: Slackdownloader log in
 
   Background: I am signed in
 
@@ -122,7 +122,7 @@ Scenario: Uploading file with fine content
 
 Person(worker, "Shoprenter worker")
 System(slackDownloader, "Slack downloader")
-Rel(worker, slackDownloader, "Sign in and upload export files")
+Rel(worker, slackDownloader, "log in and upload export files")
 ----
 
 === Level 2
@@ -133,20 +133,20 @@ Rel(worker, slackDownloader, "Sign in and upload export files")
 
 Person(worker, "Shoprenter worker")
 System_Boundary(slackDownloader, "Slack downloader") {
-    Container(SDFrontend, 'Slack downloader Frontend', 'Vue JS')
-    Container(parser, Parser, 'Php, Symfony Bundle')
-    Container(user, User, 'Php, Symfony Bundle')
-    ContainerDb(userDb, User database, mysql)
-    Container(auditLog, 'Audit Log', 'Php, Symfony Bundle')
+    Container(SDFrontend, 'Slack downloader Frontend', 'PHP, Twig')
+    Container(parser, Parser, 'PHP, Symfony Bundle')
+    Container(remoteUser, Remote User, 'PHP, Symfony Bundle')
+    ContainerDb(userDb, Remote User Database, MySQL)
+    Container(auditLog, 'Audit Log', 'PHP, Symfony Bundle')
 }
 
 Rel(worker, SDFrontend, 'Uploading Slack export files, watching image galery')
 Rel(SDFrontend, parser, 'Slack export file processing')
-Rel(SDFrontend, user, 'handling sign in')
-Rel(parser, user, 'Authenticate/Authorisate User')
-Rel(user, userDb, 'getting Users')
-Rel(parser, auditLog, 'Logging uploding file by User')
-Rel(user, auditLog, "Logging User's Sign in")
+Rel(SDFrontend, remoteUser, 'handling log in')
+Rel(parser, remoteUser, 'Authenticate/Authorizate Shoprenter worker')
+Rel(remoteUser, userDb, 'getting Users')
+Rel(parser, auditLog, 'Logging uploding file by Shoprenter worker')
+Rel(remoteUser, auditLog, "Logging User's log in")
 ----
 
 === Level 3
@@ -155,44 +155,50 @@ Rel(user, auditLog, "Logging User's Sign in")
 ----
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
 
-Container(SDFrontend, "Slack downloader Frontend", 'Vue js')
-
-Container_Boundary(parser, 'Parser', 'php, Symfony bundle') {
-    Component(parserController, 'ParserController', 'Symfony Controller')
-    Component(getMemeImagesFromFileHandler, 'getMemeImagesFromFileHandler', 'Application Use Case')
-    Component(securityAdapter, 'Security Adapter', 'Infrastructure adapter')
-}
-Container_Boundary(user, 'User', 'php, Symfony bundle') {
-    Component('securityController', 'SecurityController', 'REST API')
-}
-
-Container_Boundary(auditLog, 'AuditLog', 'php, Symfony bundle') {
-    Component('messageBusListener', 'MessageBusListener', 'Symfony Messenger')
-    Component('logUserSignInHandler', 'LogUserSignInHandler', 'Appplication Use Case')
-    Component('logUserParsingHandler', 'LogUserParsingHandler', 'Appplication Use Case')
-}
-
-ContainerDb(userDb, User Database, mysql)
+Container(SDFrontend, "Slack downloader Frontend", 'PHP, Twig')
 ContainerDb(messageBus, Event Message Bus, Symfony Messenger)
 
-Rel(securityController, userDb, 'getting user information')
-Rel(SDFrontend, securityController, 'handling sign in')
-Rel(SDFrontend, parserController, 'handling parsing')
+Container_Boundary(parser, 'Parser', 'PHP, Symfony bundle') {
+    Component(fileUploadController, 'FileUploadController', 'Symfony Controller')
+    Component(loginController, 'LoginController', 'Symfony Controller')
+    Component(getImagesFromFile, 'GetImagesFromFile', 'Application Use Case')
+    Component(authenticateShoprenterWorker, 'AuthenticateShoprenterWorker', 'Application Use Case')
+    Component(shoprenterWorkerRepository, 'Shoprenter Worker Respository', 'Infrastructure adapter')
+}
+Rel(SDFrontend, loginController, 'handling log in')
+Rel(SDFrontend, fileUploadController, 'handling parsing')
+Rel(loginController, authenticateShoprenterWorker, 'handling log in')
+Rel(fileUploadController, getImagesFromFile, 'parsing images from file')
+Rel(getImagesFromFile, shoprenterWorkerRepository, 'get Worker infos')
+Rel(authenticateShoprenterWorker, shoprenterWorkerRepository, 'authenticate')
+Rel(getImagesFromFile, messageBus, 'dispatch parsing event')
 
-Rel(securityAdapter, securityController, 'authorization')
+Container_Boundary(remoteUser, 'Remote User', 'PHP, Symfony bundle') {
+    Component('userApiController', 'UserApiController', 'REST API')
+    Component(getUserByCredentials, 'GetUserByCredentials', 'Application Use Case')
+    Component(getUserByEmail, 'GetUserByEmail', 'Application Use Case')
+    Component(getUserById, 'GetUserById', 'Application Use Case')
+}
+Rel(shoprenterWorkerRepository, userApiController, 'authorization, get Worker infos')
+ContainerDb(userDb, User Database, MySQL)
+Rel(userApiController, getUserByCredentials, 'getting User information')
+Rel(userApiController, getUserByEmail, 'getting User information')
+Rel(userApiController, getUserById, 'getting User information')
 
-Rel(getMemeImagesFromFileHandler, securityAdapter, 'authorization')
+Rel(getUserByCredentials, userDb, 'get credential')
+Rel(getUserByEmail, userDb, 'getting User information')
+Rel(getUserById, userDb, 'getting User information')
+Rel(getUserByCredentials, messageBus, ' dispatch log in event')
 
-Rel(parserController, getMemeImagesFromFileHandler, 'parsing images from file')
+Container_Boundary(auditLog, 'AuditLog', 'php, Symfony bundle') {
+    Component('contextTransferEventHandler', 'ContextTransferEventHandler', 'Symfony Messenger')
+    Component('logUserEvent', 'LogUserEvent', 'Appplication Use Case')
+}
+Rel(messageBus, contextTransferEventHandler, 'retrieve context transfer event')
+ContainerDb(auditLogDb, Audit log Database, MySQL)
 
-Rel(messageBusListener, logUserParsingHandler, 'log on parsing event')
-Rel(messageBusListener, logUserSignInHandler, 'log on sign up event')
-
-Rel(getMemeImagesFromFileHandler, messageBus, 'parsing event')
-Rel(securityController, messageBus, 'sign up event')
-Rel(messageBus, messageBusListener, 'event handling')
-
-
+Rel(contextTransferEventHandler, logUserEvent, 'log event')
+Rel(logUserEvent, auditLogDb, 'save event log')
 ----
 
 
