@@ -4,7 +4,7 @@ namespace App\RemoteUserBundle\Domain\Event;
 
 use DateTimeImmutable;
 
-class UserLoggedInEvent extends DomainEvent implements UserActivitiesEventInterface
+class UserLoggedInEvent extends DomainEvent implements UserActivityEventInterface
 {
     private int $userId;
 

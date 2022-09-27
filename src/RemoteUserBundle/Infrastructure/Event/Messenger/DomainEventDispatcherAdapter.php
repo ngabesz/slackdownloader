@@ -3,7 +3,7 @@
 namespace App\RemoteUserBundle\Infrastructure\Event\Messenger;
 
 use App\RemoteUserBundle\Domain\Event\DomainEventDispatcherInterface;
-use App\RemoteUserBundle\Domain\Event\UserActivitiesEventInterface;
+use App\RemoteUserBundle\Domain\Event\UserActivityEventInterface;
 use App\Shared\Infrastructure\Event\ContextTransferEvent;
 use Symfony\Component\Messenger\HandleTrait;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,7 +19,7 @@ class DomainEventDispatcherAdapter implements DomainEventDispatcherInterface
         $this->messageBus = $eventBus;
     }
 
-    public function dispatchUserActivityEvent(UserActivitiesEventInterface $event): void
+    public function dispatchUserActivityEvent(UserActivityEventInterface $event): void
     {
         $this->handle(new ContextTransferEvent(
             get_class($event),

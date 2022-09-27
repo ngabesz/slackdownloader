@@ -2,7 +2,7 @@
 
 namespace App\RemoteUserBundle\Domain\Event;
 
-interface UserActivitiesEventInterface
+interface UserActivityEventInterface
 {
     public function getUserId(): int;
 }
