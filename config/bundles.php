@@ -13,5 +13,5 @@ return [
     Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle::class => ['all' => true],
     App\ParserBundle\ParserBundle::class => ['all' => true],
     App\RemoteUserBundle\RemoteUserBundle::class => ['all' => true],
-    App\AuditlogBundle\AuditlogBundle::class => ['all' => true]
+    App\AuditLogBundle\AuditLogBundle::class => ['all' => true]
 ];

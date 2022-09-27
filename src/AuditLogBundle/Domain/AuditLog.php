@@ -1,10 +1,10 @@
 <?php
 
-namespace App\AuditlogBundle\Domain;
+namespace App\AuditLogBundle\Domain;
 
 use DateTimeImmutable;
 
-class Auditlog
+class AuditLog
 {
     private int $id;
     private int $userId;

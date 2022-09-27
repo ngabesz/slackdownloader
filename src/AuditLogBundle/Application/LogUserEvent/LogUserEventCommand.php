@@ -1,6 +1,6 @@
 <?php
 
-namespace App\AuditlogBundle\Application\LogUserEvent;
+namespace App\AuditLogBundle\Application\LogUserEvent;
 
 use DateTimeImmutable;
 

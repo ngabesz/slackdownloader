@@ -1,8 +1,8 @@
 <?php
 
-namespace App\AuditlogBundle\Infrastructure\Event;
+namespace App\AuditLogBundle\Infrastructure\Event;
 
-use App\AuditlogBundle\Application\LogUserEvent\LogUserEventCommand;
+use App\AuditLogBundle\Application\LogUserEvent\LogUserEventCommand;
 use App\Shared\Infrastructure\Event\ContextTransferEvent;
 use Exception;
 use Symfony\Component\Messenger\HandleTrait;

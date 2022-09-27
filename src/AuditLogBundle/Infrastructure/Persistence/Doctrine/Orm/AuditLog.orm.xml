@@ -4,8 +4,8 @@
                   xsi:schemaLocation="https://doctrine-project.org/schemas/orm/doctrine-mapping
                           https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
-    <entity name="App\AuditlogBundle\Domain\Auditlog"
-            repository-class="App\AuditlogBundle\Infrastructure\Persistence\Doctrine\Repository\AuditlogRepository"
+    <entity name="App\AuditLogBundle\Domain\AuditLog"
+            repository-class="App\AuditLogBundle\Infrastructure\Persistence\Doctrine\Repository\AuditLogRepository"
             table="auditlog" >
 
         <id name="id" type="integer" column="id">

@@ -1,9 +1,9 @@
 <?php
 
-namespace App\AuditlogBundle\Application\LogUserEvent;
+namespace App\AuditLogBundle\Application\LogUserEvent;
 
-use App\AuditlogBundle\Domain\Auditlog;
-use App\AuditlogBundle\Domain\AuditLogRepositoryInterface;
+use App\AuditLogBundle\Domain\AuditLog;
+use App\AuditLogBundle\Domain\AuditLogRepositoryInterface;
 
 class LogUserEventHandler
 {
@@ -16,7 +16,7 @@ class LogUserEventHandler
 
     public function __invoke(LogUserEventCommand $command): void
     {
-        $newLog = new Auditlog();
+        $newLog = new AuditLog();
         $newLog->setEventName($command->getEventName());
         $newLog->setUserId($command->getUserId());
         $newLog->setHappenedAt($command->getHappenedAt());

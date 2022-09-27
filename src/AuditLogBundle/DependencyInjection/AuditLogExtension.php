@@ -1,13 +1,13 @@
 <?php
 
-namespace App\AuditlogBundle\DependencyInjection;
+namespace App\AuditLogBundle\DependencyInjection;
 
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class AuditlogExtension extends Extension
+class AuditLogExtension extends Extension
 {
 
     public function load(array $configs, ContainerBuilder $container)
