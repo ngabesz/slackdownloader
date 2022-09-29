@@ -33,7 +33,9 @@ git clone git@github.com:ngabesz/slackdownloader.git
 ### .env
 
 * Másold le a ```.env``` fájlt és nevezd át ```.env.local```-ra 
-* Vedd ki a következő sorból kommentet ```DATABASE_URL="mysql://slackdownloader:slackdownloader@172.18.0.2/slackdownloader?serverVersion=5.7&charset=utf8mb4"```
+* Vedd ki a következő sorból kommentet ```DATABASE_URL="mysql://slackdownloader:slackdownloader@db/slackdownloader?serverVersion=5.7&charset=utf8mb4"```
+* Ha esetleg nem tudna kapcsolódni a db-hez, akkor megadhatod a ```172.18.0.2``` ip címet.
+  ```DATABASE_URL="mysql://slackdownloader:slackdownloader@172.18.0.2/slackdownloader?serverVersion=5.7&charset=utf8mb4"```
 
 ### Creating database
 
