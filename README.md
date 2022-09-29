@@ -28,6 +28,7 @@ git clone git@github.com:ngabesz/slackdownloader.git
 * Ha lokálisan van apache telepítve, akkor azt állítsd le
 * Lépjünk be a /docker mappába
 * Terminálban futtassuk: ```bash run.sh```
+* Ha esetleg nem tudnád futtatni a projecten pl. a composert: ```chmod 777 slackdownloader```
 
 ### .env
 
@@ -40,7 +41,7 @@ git clone git@github.com:ngabesz/slackdownloader.git
 ```docker exec -it project_php bash```
 * A következő paranccsal hozzuk létre a ```slackdownloader``` adatbázist:
 ```bin/console doctrine:database:create```
-* Hozzuk létre a táblákat: ```bin/console doctrine:update --force```
+* Hozzuk létre a táblákat: ```bin/console doctrine:schema:update --force```
 
 ## Előkészítés
 * ```http://localhost:8080``` találod a phpmyadmin
@@ -58,4 +59,10 @@ git clone git@github.com:ngabesz/slackdownloader.git
 
 A phpmyadmin-ban, az 'auditlog' táblában fogod látni, milyen események történtek.
 A sikeres belépést és a sikeres fájl parszolás van lelogolva.
+
+## Használat - CLI
+* Lépj be a project_php containerbe. ```docker exec -it project_php bash```
+* Add ki a következő parancsot:
+```bin/console slackdownloader:image:parse <email> <password> ./src/ParserBundle/Tests/Unit/Infrastructure/Shared/Filesystem/fixture/test.json```
+* A console log-ban meg kell jelennie a kép urlnek
 
