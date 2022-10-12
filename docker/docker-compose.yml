@@ -32,6 +32,18 @@ services:
     ports:
       - 80:80
       - 443:443
+
+  rabbit-mq:
+    image: rabbitmq:3-management
+    volumes:
+      - ./rabbitmq/:/var/lib/rabbitmq:rw
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+      - RABBITMQ_DEFAULT_VHOST=/
   db:
     image: mysql:8.0.19
     ports:

@@ -21,6 +21,8 @@ RUN apt-get update && apt-get install -y \
         nano \
         locales \
         locales-all \
+        librabbitmq-dev \
+    && pecl install amqp \
     && docker-php-ext-configure gd \
     && docker-php-ext-install -j$(nproc) gd \
     && docker-php-ext-install zip \
