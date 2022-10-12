@@ -6,10 +6,10 @@ framework:
             query.bus: ~
             event.bus:
                 default_middleware: allow_no_handlers
-#        transports:
+        transports:
 #            # https://symfony.com/doc/current/messenger.html#transport-configuration
-#            async:
-#                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+            async:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
 #                options:
 #                    use_notify: true
 #                    check_delayed_interval: 60000
@@ -17,7 +17,7 @@ framework:
 #                    max_retries: 3
 #                    multiplier: 2
 #            failed: 'doctrine://default?queue_name=failed'
-#            # sync: 'sync://'
+            sync: 'sync://'
 
         routing:
 #            Symfony\Component\Mailer\Messenger\SendEmailMessage: async
@@ -25,4 +25,5 @@ framework:
 #            Symfony\Component\Notifier\Message\SmsMessage: async
 
             # Route your messages to the transports
-            # 'App\Message\YourMessage': async
+             App\AuditLogBundle\Application\LogUserEvent\LogUserEventCommand: async
+             App\Shared\Infrastructure\Event\ContextTransferEvent: sync

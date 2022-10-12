@@ -12,7 +12,7 @@ use function array_key_exists;
 
 class ContextTransferEventHandler
 {
-    use HandleTrait;
+    private $messageBus;
 
     public function __construct(MessageBusInterface $commandBus)
     {
@@ -27,7 +27,7 @@ class ContextTransferEventHandler
             throw new Exception('ContextTransferEventHandler | Required data is missing: userId');
         }
 
-        $this->handle(new LogUserEventCommand(
+        $this->messageBus->dispatch(new LogUserEventCommand(
             $data['userId'],
             $event->getEventName(),
             $event->getHappenedAt()
